@@ -1,38 +1,33 @@
-const logs = [];
-console.log = (val) => {
-  logs.push(val);
-};
-const { expect } = require("chai");
-const rewire = require("rewire");
-const fs = require("fs");
-const code = fs.readFileSync("app.js", "utf8");
+console.log = function() {};
+const { assert } = require('chai');
+const fs = require('fs');
+const Structured = require('structured');
 
-describe("", function () {
-  it("", function () {
-    let appModule;
-    try {
-      appModule = rewire("../app.js");
-    } catch (e) {
-      expect(
-        true,
-        "Try checking your code again. You likely have a syntax error."
-      ).to.equal(false);
-    }
-    let handleFailure;
-    try {
-      handleFailure = appModule.__get__("handleFailure");
-    } catch (e) {
-      expect(true, "Did you create `handleFailure()`?").to.equal(false);
-    }
-    expect(
-      handleFailure,
-      "`handleFailure()` should be a function."
-    ).to.be.an.instanceOf(Function);
+const code = fs.readFileSync('app.js', 'utf8');
 
-    handleFailure("cat");
-    expect(
-      logs[logs.length - 1] === "cat",
-      "Your `handleFailure()` function should log to the console the value passed into it."
-    ).to.equal(true);
+describe('', function () {
+  it('', function() {
+
+    let structureOne = function() {
+        checkInventory(order)
+        .then((resolvedValueArray) => {
+          return processPayment(resolvedValueArray);
+        })
+        .then((resolvedValueArray) => {
+          return shipOrder(resolvedValueArray);
+        })
+        .then((successMessage) => {
+          console.log(successMessage);
+        })
+        .catch((errorMessage) => {
+          console.log(errorMessage);
+        });
+        
+    };
+
+
+    let isMatchOne = Structured.match(code, structureOne);
+
+    assert.isOk(isMatchOne, "Did you return `shipOrder(resolvedValueArray)` in the second `.then()`'s success handler?");
   });
 });
